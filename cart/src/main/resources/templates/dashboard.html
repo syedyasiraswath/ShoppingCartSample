@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Product Dashboard" />
+<meta name="author" content="Syedyasiraswath Askar Basha" />
+<link rel="icon" href="favicon.ico" />
+
+<title>Login Page</title>
+
+<!-- Bootstrap core CSS -->
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous" />
+
+<link th:href="@{css/style.css}" rel="stylesheet" />
+<style type="text/css">
+table.redTable {
+	font-family: "Times New Roman", Times, serif;
+	border: 2px solid #2D8FA4;
+	background-color: #EEEEEE;
+	width: 100%;
+	text-align: center;
+	border-collapse: collapse;
+}
+
+table.redTable td, table.redTable th {
+	border: 2px solid #AAAAAA;
+	padding: 3px 2px;
+}
+
+table.redTable tbody td {
+	font-size: 13px;
+	color: #201133;
+}
+
+table.redTable tr:nth-child(even) {
+	background: #F5C8BF;
+}
+
+table.redTable thead {
+	background: #267DA4;
+}
+
+table.redTable thead th {
+	font-size: 19px;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	border-left: 2px solid #201A1A;
+}
+
+table.redTable thead th:first-child {
+	border-left: none;
+}
+
+table.redTable tfoot {
+	font-size: 13px;
+	font-weight: bold;
+	color: #FFFFFF;
+	background: #267DA4;
+}
+
+table.redTable tfoot td {
+	font-size: 13px;
+}
+
+table.redTable tfoot .links {
+	text-align: right;
+}
+
+table.redTable tfoot .links a {
+	display: inline-block;
+	background: #FFFFFF;
+	color: #A40808;
+	padding: 2px 8px;
+	border-radius: 5px;
+}
+</style>
+</head>
+
+<body class="gray-bg">
+	<!-- Include _menu.html -->
+	<th:block th:include="/_menu"></th:block>
+	<div class="middle-box text-center loginscreen animated fadeInDown">
+		<div>
+			<h4>Product Dashboard</h4>
+			<div th:if="${errorMessage}" class="alert alert-danger" role="alert"
+				th:text="${errorMessage}"></div>
+
+			<div th:if="${confirmationMessage}" class="alert alert-success"
+				role="alert" th:text=${confirmationMessage}></div>
+			<table class="redTable">
+				<thead>
+					<tr>
+						<td colspan=2></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>User ID</td>
+						<td th:text="${userId}"></td>
+					</tr>
+					<tr>
+						<td>User Name</td>
+						<td th:text="${userName}"></td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td th:text="${email}"></td>
+					</tr>
+				<tbody>
+			</table>
+
+			<table class="redTable">
+				<thead>
+					<tr>
+						<th>Product ID</th>
+						<th>Product Name</th>
+						<th>Product Rate</th>
+						<th>Product Available Quantity</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="4">
+							<div class="links">
+								<a href="#">&laquo;</a> <a class="active" href="#">1</a> <a
+									href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+					<tr th:each="product : ${productList}">
+						<td th:text="${product.productInfoId}">Product Id</td>
+						<td th:text="${product.productName}">Product Name</td>
+						<td th:text="${product.productRate}">Product Rate</td>
+						<td th:text="${product.productAvailQty}">Product Available
+							Quantity</td>
+					</tr>
+				<tbody>
+			</table>
+
+		</div>
+
+		<!--  -->
+
+		<div>
+
+			<h4>Add details to your cart!</h4>
+
+			<form autocomplete="off" action="#" th:action="@{/shoppingCart/add}"
+				th:object="${shoppingCart}" method="post" class="m-t" role="form"
+				data-toggle="validator">
+
+				<div th:if="${cartConfirmationMessage}" class="alert alert-success"
+					role="alert" th:text=${confirmationMessage}>
+					<th:block th:include="/login"></th:block>
+				</div>
+
+				<div th:if="${cartErrorMessage}" class="alert alert-danger"
+					role="alert" th:text="${cartErrorMessage}"></div>
+
+
+				<div th:if="${#fields.hasErrors('productInfoId')}"
+					th:errors="*{productInfoId}"
+					class="validation-message alert alert-danger" role="alert"></div>
+
+				<div th:if="${#fields.hasErrors('quantity')}"
+					th:errors="*{quantity}"
+					class="validation-message alert alert-danger" role="alert"></div>
+
+				<div th:if="${#fields.hasErrors('userId')}"
+					th:errors="*{userId}"
+					class="validation-message alert alert-danger" role="alert"></div>
+
+
+				<div class="form-group input-group has-feedback">
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-envelope"></span>
+					</span> <input type="text" th:field="*{productInfoId}"
+						placeholder="Product Id" class="form-control" required /> <span
+						class="glyphicon form-control-feedback" aria-hidden="true"></span>
+				</div>
+
+				<div class="form-group input-group has-feedback">
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-user"></span>
+					</span> <input type="text"  th:field="*{quantity}"
+						placeholder="Product Quantity" class="form-control" required /> <span
+						class="glyphicon form-control-feedback" aria-hidden="true"></span>
+				</div>
+
+				<div class="form-group input-group has-feedback">
+					<span class="input-group-addon"> <span
+						class="glyphicon glyphicon-user"></span>
+					</span> <input type="text"  th:field="*{userId}"
+						placeholder="UserId" class="form-control" required /> <span
+						class="glyphicon form-control-feedback" aria-hidden="true"></span>
+				</div>
+
+				<button type="submit" class="btn btn-primary block full-width m-b">Add</button>
+
+			</form>
+
+		</div>
+
+
+	</div>
+
+	<!-- jQuery-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Bootstrap -->
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
+
+	<!-- Bootstrap Validator plugin -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+</body>
+
+</html>
